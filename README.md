@@ -1,4 +1,5 @@
-# Modifications for SERA
+# SERA-SWE-agent
+This repository contains the SWE-agent harness for SERA: Soft-Verified Efficient Repository Agents.
 
 We make modifications in five files:
 - A new utils file in `sweagent/run/sera_sweagent_utils.py`

@@ -41,6 +41,7 @@ import traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed, wait, FIRST_COMPLETED
 from contextlib import ExitStack
 from pathlib import Path
+from subprocess import CalledProcessError
 from typing import Self
 
 import openai

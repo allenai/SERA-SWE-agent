@@ -596,11 +596,15 @@ class RunBatch:
             is_good_patch = False
             try:
                 # Here are different prompts
-                # Step 1
-                agent.templates.instance_template = random.sample(self._pipeline_prompts.rollout_one_prompts, 1)[0]
-
-                # We add handling to load a previous simulated trajectory in directly as context.
-                extra_fields = instance.problem_statement.get_extra_fields()
+                # Step 1: Sample a random vague prompt and set it as the
+                # problem_statement so the config's instance_template
+                # (which should use {{problem_statement}}) picks it up.
+                # We must pre-render Jinja vars like {{start_fn}} here
+                # because Jinja does not recursively render template
+                # strings embedded inside variable values.
+                from jinja2 import Template
+                raw_prompt = random.sample(self._pipeline_prompts.rollout_one_prompts, 1)[0]
+                instance.problem_statement.text = Template(raw_prompt).render(**instance.problem_statement.get_extra_fields())
                 env.start()
                 self._chooks.on_instance_start(index=0, env=env, problem_statement=instance.problem_statement)
                 # Step 2

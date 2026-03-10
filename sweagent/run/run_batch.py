@@ -50,6 +50,7 @@ from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from rich.live import Live
 from swerex.deployment.hooks.status import SetStatusDeploymentHook
+from urllib.error import HTTPError
 
 from sweagent import TRAJECTORY_DIR
 from sweagent.agent.agents import AgentConfig, get_agent_from_config
@@ -267,7 +268,7 @@ class RunBatch:
         self._skip_id = skip_id.split(",")
         self._pipeline = pipeline
         self._pipeline_repo = pipeline_repo
-        self._pipeline_prompts = PipelinePromptsConfig.load(pipeline_yaml)
+        self._pipeline_prompts = PipelinePromptsConfig.load(pipeline_yaml) if pipeline and pipeline_yaml else PipelinePromptsConfig()
         
         if self._pipeline and self._pipeline_repo: # Case 1. Handle specific demonstration issues
             if os.path.isfile(self._pipeline_repo): # Handle file to load demonstration issues
